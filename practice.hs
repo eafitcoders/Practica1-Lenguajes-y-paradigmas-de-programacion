@@ -6,7 +6,7 @@ import Control.DeepSeq (deepseq)
 
 -- Definición del tipo de datos para representar la información de un estudiante
 data Estudiante = Estudiante {
-    idEstudiante :: String,
+    matricula :: String,
     nombre :: String,
     fechaIngreso :: UTCTime,
     fechaEgreso :: Maybe UTCTime  -- Usamos Maybe para representar que el estudiante aún está en la universidad o ya egresó
@@ -14,18 +14,18 @@ data Estudiante = Estudiante {
 
 -- Función para registrar la entrada de un estudiante a la universidad
 registrarIngreso :: String -> String -> UTCTime -> [Estudiante] -> [Estudiante]
-registrarIngreso idEstudiante nombreEstudiante tiempo estudiantes =
-    Estudiante idEstudiante nombreEstudiante tiempo Nothing : estudiantes
+registrarIngreso matriculaEstudiante nombreEstudiante tiempo estudiantes =
+    Estudiante matriculaEstudiante nombreEstudiante tiempo Nothing : estudiantes
 
 -- Función para registrar la salida de un estudiante de la universidad
 registrarEgreso :: String -> UTCTime -> [Estudiante] -> [Estudiante]
-registrarEgreso idEstudiante tiempo estudiantes =
-    map (\e -> if idEstudiante == idEstudiante e then e { fechaEgreso = Just tiempo } else e) estudiantes
+registrarEgreso matriculaEstudiante tiempo estudiantes =
+    map (\e -> if matriculaEstudiante == matricula e then e { fechaEgreso = Just tiempo } else e) estudiantes
 
 -- Función para buscar un estudiante por su matrícula en la universidad
 buscarEstudiante :: String -> [Estudiante] -> Maybe Estudiante
-buscarEstudiante idEstudiante estudiantes =
-    find (\e -> idEstudiante == idEstudiante e && isNothing (fechaEgreso e)) estudiantes
+buscarEstudiante matriculaEstudiante estudiantes =
+    find (\e -> matriculaEstudiante == matricula e && isNothing (fechaEgreso e)) estudiantes
     where
         isNothing Nothing = True
         isNothing _       = False
@@ -41,7 +41,6 @@ guardarEstudiantes :: [Estudiante] -> IO ()
 guardarEstudiantes estudiantes = do
     withFile "estudiantes.txt" WriteMode $ \h -> do
         hPutStr h (unlines (map mostrarEstudiante estudiantes))
-    putStrLn "Información de estudiantes guardada en el archivo estudiantes.txt."
 
 -- Función para cargar la información de los estudiantes desde un archivo de texto
 cargarEstudiantes :: IO [Estudiante]
@@ -56,8 +55,8 @@ cargarEstudiantes = do
 
 -- Función para mostrar la información de un estudiante como cadena de texto
 mostrarEstudiante :: Estudiante -> String
-mostrarEstudiante (Estudiante idEstudiante nombre fechaIngreso fechaEgreso) =
-    "Estudiante {ID = \"" ++ idEstudiante ++ "\", nombre = \"" ++ nombre ++ "\", fechaIngreso = " ++ show fechaIngreso ++ ", fechaEgreso = " ++ maybe "Nothing" show fechaEgreso ++ "}"
+mostrarEstudiante (Estudiante matricula nombre fechaIngreso fechaEgreso) =
+    "Estudiante {matricula = \"" ++ matricula ++ "\", nombre = \"" ++ nombre ++ "\", fechaIngreso = " ++ show fechaIngreso ++ ", fechaEgreso = " ++ maybe "Nothing" show fechaEgreso ++ "}"
 
 -- Función para listar los estudiantes en la universidad
 listarEstudiantes :: [Estudiante] -> IO ()
@@ -90,31 +89,31 @@ cicloPrincipal estudiantes = do
     case opcion of
         "1" -> do
             putStrLn "Ingrese el ID del estudiante:"
-            idEstudiante <- getLine
+            matriculaEstudiante <- getLine
             putStrLn "Ingrese el nombre del estudiante:"
             nombreEstudiante <- getLine
             tiempoActual <- getCurrentTime
-            let estudiantesActualizados = registrarIngreso idEstudiante nombreEstudiante tiempoActual estudiantes
-            putStrLn $ "Estudiante con ID " ++ idEstudiante ++ " ingresado a la universidad."
+            let estudiantesActualizados = registrarIngreso matriculaEstudiante nombreEstudiante tiempoActual estudiantes
+            putStrLn $ "Estudiante con ID " ++ matriculaEstudiante ++ " ingresado a la universidad."
             guardarEstudiantes estudiantesActualizados
             cicloPrincipal estudiantesActualizados
 
         "2" -> do
             putStrLn "Ingrese el ID del estudiante a egresar:"
-            idEstudiante <- getLine
+            matriculaEstudiante <- getLine
             tiempoActual <- getCurrentTime
-            let estudiantesActualizados = registrarEgreso idEstudiante tiempoActual estudiantes
-            putStrLn $ "Estudiante con ID " ++ idEstudiante ++ " egresado de la universidad."
+            let estudiantesActualizados = registrarEgreso matriculaEstudiante tiempoActual estudiantes
+            putStrLn $ "Estudiante con ID " ++ matriculaEstudiante ++ " egresado de la universidad."
             guardarEstudiantes estudiantesActualizados
             cicloPrincipal estudiantesActualizados
 
         "3" -> do
-            putStrLn "Ingrese el ID del estudiante a buscar:"
-            idEstudiante <- getLine
-            case buscarEstudiante idEstudiante estudiantes of
+            putStrLn "Ingrese la matrícula del estudiante a buscar:"
+            matriculaEstudiante <- getLine
+            case buscarEstudiante matriculaEstudiante estudiantes of
                 Just estudiante -> do
                     tiempoTotal <- tiempoEnUniversidad estudiante
-                    putStrLn $ "El estudiante con ID " ++ idEstudiante ++ " se encuentra en la universidad."
+                    putStrLn $ "El estudiante con ID " ++ matriculaEstudiante ++ " se encuentra en la universidad."
                     putStrLn $ "Tiempo en la universidad: " ++ show tiempoTotal ++ " segundos."
                 Nothing -> putStrLn "Estudiante no encontrado en la universidad."
             cicloPrincipal estudiantes

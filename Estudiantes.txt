@@ -1,2 +1,1 @@
-Estudiante {ID = "2", nombre = "Juan", fechaIngreso = 2025-02-24 22:39:07.4986326 UTC, fechaEgreso = Nothing}
-Estudiante {ID = "1", nombre = "Diego", fechaIngreso = 2025-02-24 22:38:46.3155264 UTC, fechaEgreso = Nothing}
+Estudiante {matricula = "1", nombre = "Diego", fechaIngreso = 2025-02-24 23:24:20.6862831 UTC, fechaEgreso = 2025-02-24 23:24:34.6789066 UTC}
