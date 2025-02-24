@@ -1,4 +1,4 @@
 import System.Process
 
 main = do
-    system "D/practice/practice.exe"
+    system "practice/practice.exe"

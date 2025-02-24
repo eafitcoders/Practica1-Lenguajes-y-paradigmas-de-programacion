@@ -57,7 +57,7 @@ cargarEstudiantes = do
 -- Función para mostrar la información de un estudiante como cadena de texto
 mostrarEstudiante :: Estudiante -> String
 mostrarEstudiante (Estudiante matricula nombre fechaIngreso fechaEgreso) =
-    "Estudiante {matricula = \"" ++ matricula ++ "\", nombre = \"" ++ nombre ++ "\", fechaIngreso = " ++ show fechaIngreso ++ ", fechaEgreso = " ++ maybe "Nothing" show fechaEgreso ++ "}"
+    "Estudiante {ID = \"" ++ matricula ++ "\", nombre = \"" ++ nombre ++ "\", fechaIngreso = " ++ show fechaIngreso ++ ", fechaEgreso = " ++ maybe "Nothing" show fechaEgreso ++ "}"
 
 -- Función para listar los estudiantes en la universidad
 listarEstudiantes :: [Estudiante] -> IO ()
@@ -89,18 +89,18 @@ cicloPrincipal estudiantes = do
     opcion <- getLine
     case opcion of
         "1" -> do
-            putStrLn "Ingrese la matrícula del estudiante:"
+            putStrLn "Ingrese el ID del estudiante"
             matriculaEstudiante <- getLine
             putStrLn "Ingrese el nombre del estudiante:"
             nombreEstudiante <- getLine
             tiempoActual <- getCurrentTime
             let estudiantesActualizados = registrarIngreso matriculaEstudiante nombreEstudiante tiempoActual estudiantes
-            putStrLn $ "Estudiante con matrícula " ++ matriculaEstudiante ++ " ingresado a la universidad."
+            putStrLn $ "Estudiante con ID " ++ matriculaEstudiante ++ " ingresado a la universidad."
             guardarEstudiantes estudiantesActualizados
             cicloPrincipal estudiantesActualizados
 
         "2" -> do
-            putStrLn "Ingrese la matrícula del estudiante a egresar:"
+            putStrLn "Ingrese el ID del estudiante a egresar:"
             matriculaEstudiante <- getLine
             tiempoActual <- getCurrentTime
             let estudiantesActualizados = registrarEgreso matriculaEstudiante tiempoActual estudiantes
@@ -109,12 +109,12 @@ cicloPrincipal estudiantes = do
             cicloPrincipal estudiantesActualizados
 
         "3" -> do
-            putStrLn "Ingrese la matrícula del estudiante a buscar:"
+            putStrLn "Ingrese el ID del estudiante a buscar:"
             matriculaEstudiante <- getLine
             case buscarEstudiante matriculaEstudiante estudiantes of
                 Just estudiante -> do
                     tiempoTotal <- tiempoEnUniversidad estudiante
-                    putStrLn $ "El estudiante con matrícula " ++ matriculaEstudiante ++ " se encuentra en la universidad."
+                    putStrLn $ "El estudiante con ID " ++ matriculaEstudiante ++ " se encuentra en la universidad."
                     putStrLn $ "Tiempo en la universidad: " ++ show tiempoTotal ++ " segundos."
                 Nothing -> putStrLn "Estudiante no encontrado en la universidad."
             cicloPrincipal estudiantes
