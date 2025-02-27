@@ -1,1 +1,3 @@
-Estudiante {matricula = "1", nombre = "Diego", fechaIngreso = 2025-02-24 23:24:20.6862831 UTC, fechaEgreso = 2025-02-24 23:24:34.6789066 UTC}
+Estudiante {identificacion = "1", nombre = "FKGD", fechaIngreso = 2025-02-26 18:47:02.7504527 UTC, fechaEgreso = Nothing}
+Estudiante {identificacion = "3", nombre = "hana", fechaIngreso = 2025-02-26 18:45:21.4522034 UTC, fechaEgreso = 2025-02-26 18:45:37.111324 UTC}
+Estudiante {identificacion = "2", nombre = "Christian", fechaIngreso = 2025-02-26 18:32:09.6082163 UTC, fechaEgreso = Nothing}
